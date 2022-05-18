@@ -2,17 +2,18 @@ grammar CoolGrammar;
 
 //Parser
 program : class+ (COMMENT)*;
-value: ID COLON TYPE;
+type: INT | STRING | TYPE | BOOL | OBJECT;
+value: ID COLON type;
 attribute_without_semicolon : value (ASSIGN expr)?;
 attribute : attribute_without_semicolon SEMICOLON;
 
-assigment : value ASSIGN expr | new;
+assigment : (value | ID) ASSIGN (expr | new) SEMICOLON;
 
 parameters : attribute_without_semicolon (COMMA attribute_without_semicolon)*;
 
-method : ID LBRACE (parameters)? RBRACE COLON TYPE LPAREN (expr*) RPAREN SEMICOLON;
+method : (ID | MAIN) LPAREN (parameters)? RPAREN COLON type LBRACE (expr*) RBRACE SEMICOLON;
 
-conditional : IF expr THEN expr ELSE expr FI;
+conditional : IF expr THEN expr ELSE expr FI SEMICOLON;
 
 loop : WHILE expr LOOP expr POOL;
 
@@ -24,18 +25,19 @@ case_option: value CASE_ARROW expr SEMICOLON;
 
 switch_case: CASE expr OF (case_option)+ ESAC;
 
-new : NEW TYPE;
+new : NEW type;
 
 isvoid : ISVOID expr;
 
 ariphemitic_operation: PLUS | MINUS | DIV | MUL | EQUALS | LESS |LESSOREQUALS;
 
-class : CLASS TYPE (INHERITS TYPE)? LBRACE (attribute)* (method)* SEMICOLON;
+class : CLASS (TYPE | MAIN) (INHERITS TYPE)? LBRACE (attribute)* (method)* RBRACE SEMICOLON;
 
 expr : attribute
     | assigment
-    | expr DOT ID LBRACE (parameters)? RBRACE
-    | ID LBRACE (parameters)? RBRACE
+    | expr DOT ID LPAREN (expr)? RPAREN
+    | ID LPAREN (expr)? RPAREN
+    | expr ATSYM type DOT ID LPAREN (expr)? RPAREN
     | conditional
     | loop
     | block
@@ -46,9 +48,11 @@ expr : attribute
     | expr ariphemitic_operation expr
     | LPAREN expr RPAREN
     | ID
-    | BOOL_CONST
+    | TRUE
+    | FALSE
     | STRING_VALUE
     | NUM
+    | ERROR
     | COMMENT;
 
 //Lexer
@@ -73,8 +77,8 @@ TILDE: '~';
 ATSYM: '@';
 
 NOT: ('n'|'N')('o'|'O')('t'|'T');
-TRUE: 't'('r'|'R')('u'|'U')('e'|'E');
-FALSE: 'f'('a'|'A')('l'|'L')('s'|'S')('e'|'E');
+TRUE: ('t'|'T')('r'|'R')('u'|'U')('e'|'E');
+FALSE: ('f'|'F')('a'|'A')('l'|'L')('s'|'S')('e'|'E');
 
 IF: ('i'|'I')('f'|'F');
 FI: ('f'|'F')('i'|'I');
@@ -87,7 +91,7 @@ LOOP: ('l'|'L')('o'|'O')('o'|'O')('p'|'P');
 POOL: ('p'|'P')('o'|'O')('o'|'O')('l'|'L');
 CLASS: ('c'|'C')('l'|'L')('a'|'A')('s'|'S')('s'|'S');
 IN: ('i'|'I')('n'|'N');
-INHERITS: ('i'|'I')('h'|'H')('e'|'E')('r'|'R')('i'|'I')('t'|'T')('s'|'S');
+INHERITS: ('i'|'I')('n'|'N')('h'|'H')('e'|'E')('r'|'R')('i'|'I')('t'|'T')('s'|'S');
 OF: ('o'|'O')('f'|'F');
 LET: ('l'|'L')('e'|'E')('t'|'T');
 NEW: ('n'|'N')('e'|'E')('w'|'W');
@@ -98,9 +102,9 @@ WS: [ \t\r\n]+ ->skip;
 NUM: [0-9]+;
 STRING_VALUE: '"'('_'|' '|','|'.'|'!'|'@'|'$'|'&'|'+'|'-'|'*'|'/'|'|'|'_'|'%'|'#'|'('|')'|'{'|'}'|[a-zA-Z]|[0-9])*'"';
 COMMENT: '--'('_'|' '|','|'.'|'!'|'@'|'$'|'&'|'+'|'-'|'*'|'/'|'|'|'_'|'%'|'#'|'('|')'|'{'|'}'|[a-zA-Z]|[0-9])*'--';
-BOOL_CONST: (TRUE|FALSE);
 
 INT: 'Int';
+BOOL: 'Bool';
 STRING: 'String';
 OBJECT:'Object';
 MAIN:('M'|'m')('ain');

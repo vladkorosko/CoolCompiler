@@ -1,5 +1,5 @@
 class B {
-    s : String <- "Hello";
+    s : Int <- 10;
     g (y:String) : Int {
         y.concat(s)
     };
@@ -24,8 +24,8 @@ class Main {
     main() : Object {
         x <- False;
         if (x = False)
-            then y <- "Hello world!"
-            else z <- x
+            then y <- "Hello world!";
+            else z <- x;
             fI;
     };
 };

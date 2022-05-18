@@ -15,6 +15,7 @@ import java.util.Objects;
 
 public class CoolLexer {
     private final CoolGrammarLexer lexer;
+    public CommonTokenStream tokensStream;
     private final List<Token> tokens;
     private List<Token> errors;
     private List<String> outputTokens;
@@ -28,7 +29,7 @@ public class CoolLexer {
         }
 
         lexer = new CoolGrammarLexer(charStream);
-        CommonTokenStream tokensStream = new CommonTokenStream(lexer);
+        tokensStream = new CommonTokenStream(lexer);
         tokensStream.fill();
         tokens = tokensStream.getTokens();
         LexTokens();
