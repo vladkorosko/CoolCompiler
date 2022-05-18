@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
-import org.example.generated.CoolLexerGrammar;
+import org.example.generated.CoolGrammarLexer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CoolLexer {
-    private final CoolLexerGrammar lexer;
+    private final CoolGrammarLexer lexer;
     private final List<Token> tokens;
     private List<Token> errors;
     private List<String> outputTokens;
@@ -27,7 +27,7 @@ public class CoolLexer {
             throw new RuntimeException(e);
         }
 
-        lexer = new CoolLexerGrammar(charStream);
+        lexer = new CoolGrammarLexer(charStream);
         CommonTokenStream tokensStream = new CommonTokenStream(lexer);
         tokensStream.fill();
         tokens = tokensStream.getTokens();

@@ -33,6 +33,16 @@
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/resources/CoolGrammar.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="C:\Users\Vladyslav\Desktop\фото дз\3 курс\Компілятори\coolcompiler\src\main\java\" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="org.example.generated" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
       </list>
     </option>
   </component>

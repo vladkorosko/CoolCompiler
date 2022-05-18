@@ -1,5 +1,57 @@
-lexer grammar CoolLexerGrammar;
+grammar CoolGrammar;
 
+//Parser
+program : class+ (COMMENT)*;
+value: ID COLON TYPE;
+attribute_without_semicolon : value (ASSIGN expr)?;
+attribute : attribute_without_semicolon SEMICOLON;
+
+assigment : value ASSIGN expr | new;
+
+parameters : attribute_without_semicolon (COMMA attribute_without_semicolon)*;
+
+method : ID LBRACE (parameters)? RBRACE COLON TYPE LPAREN (expr*) RPAREN SEMICOLON;
+
+conditional : IF expr THEN expr ELSE expr FI;
+
+loop : WHILE expr LOOP expr POOL;
+
+block : LBRACE ((expr SEMICOLON)*) RBRACE;
+
+let : LET (parameters)+ IN expr;
+
+case_option: value CASE_ARROW expr SEMICOLON;
+
+switch_case: CASE expr OF (case_option)+ ESAC;
+
+new : NEW TYPE;
+
+isvoid : ISVOID expr;
+
+ariphemitic_operation: PLUS | MINUS | DIV | MUL | EQUALS | LESS |LESSOREQUALS;
+
+class : CLASS TYPE (INHERITS TYPE)? LBRACE (attribute)* (method)* SEMICOLON;
+
+expr : attribute
+    | assigment
+    | expr DOT ID LBRACE (parameters)? RBRACE
+    | ID LBRACE (parameters)? RBRACE
+    | conditional
+    | loop
+    | block
+    | let
+    | switch_case
+    | new
+    | isvoid
+    | expr ariphemitic_operation expr
+    | LPAREN expr RPAREN
+    | ID
+    | BOOL_CONST
+    | STRING_VALUE
+    | NUM
+    | COMMENT;
+
+//Lexer
 PLUS: '+';
 MINUS: '-';
 MUL: '*';
@@ -13,8 +65,8 @@ COMMA: ',';
 DOT: '.';
 SEMICOLON: ';';
 COLON: ':';
-LT: '<';
-LE: '<=';
+LESS: '<';
+LESSOREQUALS: '<=';
 ASSIGN: '<-';
 CASE_ARROW: '=>';
 TILDE: '~';
@@ -52,5 +104,7 @@ INT: 'Int';
 STRING: 'String';
 OBJECT:'Object';
 MAIN:('M'|'m')('ain');
-ID: [a-zA-Z]('_'|[a-zA-Z]|[0-9])*;
+
+TYPE: [A-Z][a-zA-Z0-9]*;
+ID: [a-z]('_'|[a-zA-Z]|[0-9])*;
 ERROR: . ;
